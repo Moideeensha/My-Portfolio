@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moideen Sha — MBA Candidate Portfolio</title>
+<meta name="description" content="Portfolio and resume site for Moideen Sha, Full-Time MBA Candidate, Class of 2028.">
+
+<!--
+  ==========================================================================
+  MBA PORTFOLIO TEMPLATE — HOW TO CUSTOMIZE
+  ==========================================================================
+  This file is a complete, self-contained template (HTML + CSS + a little
+  vanilla JS — no build step, no dependencies besides Google Fonts).
+
+  Search for "EDIT:" comments throughout the file — they mark every spot
+  you'll want to personalize: your name, business school, employer names,
+  bullet points, links, and contact details. The sample content (Jordan
+  Reyes) is placeholder copy meant to show the layout working with real
+  sentences — swap it for your own story, keeping the same structure.
+
+  Sections, in order:
+    1. Nameplate hero        (#top-hero)
+    2. Executive Summary      (#summary)     — your "about me"
+    3. Background             (#background)  — education
+    4. Track Record           (#track-record)— pre-MBA work experience
+    5. Analysis                (#analysis)    — skills
+    6. Exhibits                (#exhibits)    — leadership / activities
+    7. Contact                 (#contact)
+  ==========================================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ======================================================================
+     TOKENS
+     ====================================================================== */
+  :root{
+    --paper:#f7f6f1;
+    --paper-deep:#efece1;
+    --ink:#16233f;
+    --ink-soft:#4b5772;
+    --rule:#dad5c7;
+    --brass:#8a6420;          /* text-safe on light backgrounds */
+    --brass-light:#c79a3e;    /* decorative use only: borders, fills */
+    --brass-on-dark:#e8c878;  /* text-safe on ink/dark backgrounds */
+    --highlighter:#ffe477;
+    --card:#ffffff;
+    --shadow:rgba(22,35,63,.16);
+    --radius:6px;
+
+    --font-display:"Source Serif 4", Georgia, serif;
+    --font-body:"Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono:"IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+    --fs-hero: clamp(2.6rem, 4vw + 1.4rem, 4.4rem);
+    --fs-h2: clamp(1.7rem, 1.4vw + 1.2rem, 2.35rem);
+    --fs-h3: clamp(1.15rem, .5vw + 1rem, 1.35rem);
+    --fs-body: clamp(1rem, .15vw + .95rem, 1.08rem);
+
+    --max: 1120px;
+    --gutter: clamp(1.25rem, 5vw, 3rem);
+  }
+
+  /* ======================================================================
+     RESET & BASE
+     ====================================================================== */
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  }
+  body{
+    margin:0;
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        rgba(75,87,114,.05) 0px,
+        rgba(75,87,114,.05) 1px,
+        transparent 1px,
+        transparent 38px
+      ),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:var(--fs-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:var(--font-display); color:var(--ink); margin:0; line-height:1.12; }
+  p{ margin:0 0 1em; }
+  a{ color:var(--brass); text-decoration:none; }
+  ul{ margin:0; padding:0; list-style:none; }
+  img{ max-width:100%; display:block; }
+
+  a:focus-visible,
+  button:focus-visible{
+    outline:3px solid var(--brass-light);
+    outline-offset:3px;
+    border-radius:2px;
+  }
+
+  .skip-link{
+    position:absolute; left:-999px; top:auto;
+    background:var(--ink); color:var(--paper);
+    padding:.75rem 1.25rem; z-index:200; border-radius:0 0 4px 0;
+    font-family:var(--font-mono); font-size:.85rem;
+  }
+  .skip-link:focus{ left:0; top:0; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brass);
+    margin:0 0 .9rem;
+    display:flex; align-items:center; gap:.6rem;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px; background:var(--brass-light);
+    display:inline-block;
+  }
+
+  mark.hl, .skill-tag{
+    background:var(--highlighter);
+    color:var(--ink);
+    padding:.15em .4em;
+    border-radius:2px;
+    box-decoration-break:clone;
+    -webkit-box-decoration-break:clone;
+  }
+
+  .edit-note{
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+
+  /* ======================================================================
+     LAYOUT HELPERS
+     ====================================================================== */
+  .section{ padding:clamp(3.5rem, 8vw, 6.5rem) var(--gutter); }
+  .section-alt{ background:var(--paper-deep); }
+  .section-inner{ max-width:var(--max); margin:0 auto; }
+  .reveal{
+    opacity:0; transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.is-visible{ opacity:1; transform:none; }
+
+  /* ======================================================================
+     HEADER / NAV
+     ====================================================================== */
+  .site-header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(247,246,241,.92);
+    backdrop-filter:saturate(140%) blur(6px);
+    border-bottom:1px solid transparent;
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .site-header.is-scrolled{
+    border-bottom-color:var(--rule);
+    box-shadow:0 6px 18px -14px var(--shadow);
+  }
+  .header-inner{
+    max-width:var(--max); margin:0 auto;
+    padding:.9rem var(--gutter);
+    display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  }
+  .brand{ display:flex; align-items:center; gap:.6rem; color:var(--ink); }
+  .brand-mark{
+    width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:.75rem; font-weight:600;
+    letter-spacing:.02em;
+  }
+  .brand-text{ font-family:var(--font-display); font-weight:600; font-size:1.05rem; }
+
+  .site-nav{
+    display:flex; align-items:center; gap:clamp(1rem, 2vw, 1.75rem);
+    overflow-x:auto;
+    -ms-overflow-style:none; scrollbar-width:none;
+    font-size:.92rem;
+  }
+  .site-nav::-webkit-scrollbar{ display:none; }
+  .site-nav a{
+    color:var(--ink-soft); white-space:nowrap;
+    padding:.3rem .1rem; border-bottom:2px solid transparent;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .site-nav a:hover, .site-nav a.is-active{ color:var(--ink); border-color:var(--brass-light); }
+  .nav-cta{
+    color:var(--ink) !important;
+    background:transparent;
+    border:1px solid var(--ink) !important;
+    padding:.4rem .9rem !important;
+    border-radius:3px;
+  }
+  .nav-cta:hover{ background:var(--ink); color:var(--paper) !important; }
+
+  /* ======================================================================
+     BUTTONS
+     ====================================================================== */
+  .btn{
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.75rem 1.4rem;
+    font-family:var(--font-body); font-weight:600; font-size:.95rem;
+    border-radius:3px; border:1px solid var(--ink);
+    transition:transform .15s ease, background .2s ease, color .2s ease;
+  }
+  .btn-primary{ background:var(--ink); color:var(--paper); }
+  .btn-primary:hover{ transform:translateY(-2px); background:#233457; }
+  .btn-ghost{ background:transparent; color:var(--ink); }
+  .btn-ghost:hover{ transform:translateY(-2px); background:var(--ink); color:var(--paper); }
+
+  /* ======================================================================
+     HERO
+     ====================================================================== */
+  .hero{
+    padding:clamp(3rem, 7vw, 5.5rem) var(--gutter) clamp(4rem, 9vw, 6rem);
+  }
+  .hero-inner{
+    max-width:var(--max); margin:0 auto;
+    display:grid; grid-template-columns:1fr; gap:clamp(2.5rem, 6vw, 4rem);
+    align-items:center;
+  }
+  @media (min-width:860px){
+    .hero-inner{ grid-template-columns:1.15fr .85fr; }
+  }
+
+  .case-tag{
+    display:inline-block;
+    font-family:var(--font-mono); font-size:.78rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--brass);
+    border:1px solid var(--brass-light);
+    padding:.35rem .7rem; border-radius:3px;
+    margin:0 0 1.4rem;
+  }
+  .hero-name{
+    font-size:var(--fs-hero); font-weight:700; letter-spacing:-.01em;
+    margin-bottom:.5rem;
+  }
+  .hero-role{
+    font-size:clamp(1.05rem, .5vw + .95rem, 1.25rem);
+    color:var(--ink-soft); margin-bottom:1.1rem;
+  }
+  .hero-tagline{
+    font-family:var(--font-display); font-style:italic; font-weight:500;
+    font-size:clamp(1.1rem, .5vw + 1rem, 1.4rem);
+    color:var(--ink); max-width:34ch; margin-bottom:2rem;
+  }
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:.9rem; }
+
+  /* --- Nameplate / tent card --- */
+  .hero-card-wrap{ justify-self:center; width:100%; max-width:300px; }
+  .hero-ridge{
+    width:0; height:0; margin:0 auto;
+    border-left:24px solid transparent;
+    border-right:24px solid transparent;
+    border-bottom:15px solid var(--ink);
+    filter:drop-shadow(0 3px 3px var(--shadow));
+  }
+  .hero-card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-top:4px solid var(--ink);
+    border-radius:0 0 var(--radius) var(--radius);
+    padding:1.6rem 1.5rem 1.3rem;
+    box-shadow:0 30px 50px -24px var(--shadow);
+    transform:rotate(-1deg);
+  }
+  .hero-card-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    gap:.75rem;
+    padding:.55rem 0;
+    border-bottom:1px dashed var(--rule);
+    font-family:var(--font-mono);
+  }
+  .hero-card-row:last-of-type{ border-bottom:none; }
+  .hero-card-row span{ font-size:.72rem; letter-spacing:.08em; color:var(--ink-soft); text-transform:uppercase; }
+  .hero-card-row strong{ font-size:.92rem; color:var(--ink); text-align:right; }
+  .hero-card-foot{
+    margin-top:.9rem; padding-top:.9rem; border-top:1px solid var(--rule);
+    text-align:center; font-family:var(--font-mono); font-size:.7rem;
+    letter-spacing:.14em; color:var(--brass); text-transform:uppercase;
+  }
+
+  /* ======================================================================
+     EXECUTIVE SUMMARY
+     ====================================================================== */
+  .summary-grid{
+    display:grid; gap:1.75rem;
+    grid-template-columns:1fr;
+    max-width:78ch;
+  }
+  @media (min-width:700px){ .summary-grid{ grid-template-columns:1fr 1fr; } }
+  .summary-grid p{ font-size:1.05rem; color:var(--ink-soft); }
+  .summary-grid p:first-child{ color:var(--ink); }
+  .dropcap::first-letter{
+    font-family:var(--font-display); font-weight:700; color:var(--brass);
+    float:left; font-size:3.6em; line-height:.82; padding:.05em .1em 0 0;
+  }
+
+  .stat-row{
+    display:flex; flex-wrap:wrap; gap:clamp(1.75rem, 4vw, 3.5rem);
+    margin-top:2.75rem; padding-top:2.25rem; border-top:1px solid var(--rule);
+  }
+  .stat-num{
+    display:block; font-family:var(--font-display); font-weight:700;
+    font-size:clamp(2rem, 2vw + 1rem, 2.6rem); color:var(--ink);
+  }
+  .stat-label{
+    font-family:var(--font-mono); font-size:.78rem; letter-spacing:.06em;
+    color:var(--ink-soft); text-transform:uppercase;
+  }
+
+  /* ======================================================================
+     BACKGROUND (ledger)
+     ====================================================================== */
+  .ledger{ border-top:1px solid var(--rule); }
+  .ledger-row{
+    display:grid; grid-template-columns:1fr; gap:.35rem;
+    padding:1.5rem 0; border-bottom:1px solid var(--rule);
+  }
+  @media (min-width:700px){
+    .ledger-row{ grid-template-columns:180px 1fr; gap:1.5rem; align-items:baseline; }
+  }
+  .ledger-date{
+    font-family:var(--font-mono); font-size:.85rem; color:var(--brass);
+    letter-spacing:.03em;
+  }
+  .ledger-body h3{ font-size:var(--fs-h3); margin-bottom:.35rem; }
+  .ledger-body p{ color:var(--ink-soft); margin:0; font-size:.98rem; }
+
+  /* ======================================================================
+     TRACK RECORD (exhibits — chronological)
+     ====================================================================== */
+  .exhibit-list{ display:grid; gap:clamp(1.5rem, 3vw, 2.25rem); }
+  .exhibit-card{
+    background:var(--card); border:1px solid var(--rule); border-radius:var(--radius);
+    padding:clamp(1.5rem, 3vw, 2.25rem);
+    display:grid; gap:1.5rem;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:760px){
+    .exhibit-card{ grid-template-columns:180px 1fr; }
+  }
+  .exhibit-num{
+    font-family:var(--font-mono); font-size:.78rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--brass);
+    border-left:2px solid var(--brass-light); padding-left:.7rem;
+    align-self:start;
+  }
+  .exhibit-card h3{ font-size:var(--fs-h3); margin-bottom:.2rem; }
+  .exhibit-meta{
+    font-family:var(--font-mono); font-size:.82rem; color:var(--ink-soft);
+    margin-bottom:1rem;
+  }
+  .exhibit-card ul{ display:grid; gap:.6rem; }
+  .exhibit-card li{
+    position:relative; padding-left:1.3rem; color:var(--ink); font-size:.98rem;
+  }
+  .exhibit-card li::before{
+    content:"—"; position:absolute; left:0; color:var(--brass-light);
+    font-family:var(--font-mono);
+  }
+
+  /* ======================================================================
+     ANALYSIS (skills)
+     ====================================================================== */
+  .skills-grid{
+    display:grid; gap:1.25rem;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:700px){ .skills-grid{ grid-template-columns:1fr 1fr; } }
+  .skill-card{
+    background:var(--card); border:1px solid var(--rule); border-radius:var(--radius);
+    padding:1.75rem;
+  }
+  .skill-card h3{
+    font-family:var(--font-mono); font-size:.85rem; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--ink-soft); margin-bottom:1.1rem;
+    font-weight:600;
+  }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap:.55rem .5rem; }
+  .skill-tag{
+    font-family:var(--font-mono); font-size:.85rem;
+  }
+  .skill-tag.r1{ transform:rotate(-1deg); display:inline-block; }
+  .skill-tag.r2{ transform:rotate(.6deg); display:inline-block; }
+  .skill-tag.r3{ transform:rotate(0deg); display:inline-block; }
+
+  /* ======================================================================
+     EXHIBITS (leadership)
+     ====================================================================== */
+  .leadership-grid{
+    display:grid; gap:1.5rem;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:760px){ .leadership-grid{ grid-template-columns:repeat(3, 1fr); } }
+  .leadership-card{
+    background:var(--card); border:1px solid var(--rule); border-radius:var(--radius);
+    padding:1.75rem; display:flex; flex-direction:column; gap:.75rem;
+  }
+  .leadership-tag{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--paper);
+    background:var(--ink); display:inline-block;
+    padding:.25rem .55rem; border-radius:2px; width:fit-content;
+  }
+  .leadership-card h3{ font-size:1.05rem; }
+  .leadership-card p{ color:var(--ink-soft); font-size:.95rem; margin:0; }
+
+  /* ======================================================================
+     CONTACT
+     ====================================================================== */
+  .contact-wrap{
+    display:grid; gap:2.5rem; grid-template-columns:1fr;
+    align-items:center;
+  }
+  @media (min-width:860px){ .contact-wrap{ grid-template-columns:1fr 1fr; } }
+  .contact-intro h2{ font-size:var(--fs-h2); margin-bottom:1rem; }
+  .contact-intro p{ color:var(--ink-soft); max-width:42ch; font-size:1.05rem; }
+
+  .contact-card{
+    background:var(--ink); color:var(--paper);
+    border-radius:var(--radius); padding:clamp(1.75rem, 3vw, 2.5rem);
+    position:relative; overflow:hidden;
+  }
+  .contact-card::before{
+    content:""; position:absolute; inset:0 0 auto 0; height:4px;
+    background:var(--brass-light);
+  }
+  .contact-card dl{ display:grid; gap:1.1rem; margin:0; }
+  .contact-card .row{ display:grid; gap:.15rem; }
+  .contact-card dt{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--brass-on-dark);
+  }
+  .contact-card dd{ margin:0; font-size:1.02rem; }
+  .contact-card a{ color:var(--paper); border-bottom:1px solid rgba(247,246,241,.35); }
+  .contact-card a:hover{ border-color:var(--paper); }
+
+  /* ======================================================================
+     FOOTER
+     ====================================================================== */
+  .site-footer{
+    border-top:1px solid var(--rule);
+    padding:2rem var(--gutter) 3rem;
+  }
+  .footer-inner{
+    max-width:var(--max); margin:0 auto;
+    display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; justify-content:space-between;
+    font-family:var(--font-mono); font-size:.78rem; color:var(--ink-soft);
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- EDIT: swap "Jordan Reyes" and the "JR" monogram throughout the header/footer for your own name -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#top-hero">
+      <span class="brand-mark">M</span>
+      <span class="brand-text">Moideen Sha</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#summary">Summary</a>
+      <a href="#background">Background</a>
+      <a href="#track-record">Track Record</a>
+      <a href="#analysis">Analysis</a>
+      <a href="#exhibits">Exhibits</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ==================================================================
+       HERO — nameplate styled after the tent cards MBA students use
+       for cold-calling in class.
+       ================================================================== -->
+  <section class="hero" id="top-hero">
+    <div class="hero-inner">
+      <div class="hero-copy reveal">
+        <!-- EDIT: your section / class year -->
+        <p class="case-tag">About Me – B</p>
+        <h1 class="hero-name">Moideen Sha</h1>
+        <!-- EDIT: your business school -->
+        <p class="hero-role">MBA Candidate, Class of 2028 — <span class="edit-note">LEAD College</span></p>
+        <p class="hero-tagline">Turning my love for Training and Event Oraganizing into a job <mark class="hl">Entrtainment and Communication strategy</mark>.</p>
+        <div class="hero-actions">
+          <!-- EDIT: point this at your résumé PDF -->
+          <a class="btn btn-primary" href="#">Download Résumé</a>
+          <!-- EDIT: your LinkedIn URL -->
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/moideen-sha-44b5b71a7/" target="_blank" rel="noopener">View LinkedIn ↗</a>
+        </div>
+      </div>
+
+      <div class="hero-card-wrap reveal" aria-hidden="true">
+        <div class="hero-ridge"></div>
+        <div class="hero-card">
+          <div class="hero-card-row"><span>Name</span><strong>Moideen Sha</strong></div>
+          <div class="hero-card-row"><span>Program</span><strong>Full-Time MBA</strong></div>
+          <div class="hero-card-row"><span>Section</span><strong>B</strong></div>
+          <div class="hero-card-row"><span>Class</span><strong>2028</strong></div>
+          <div class="hero-card-foot">Out of Class Ready</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       EXECUTIVE SUMMARY
+       ================================================================== -->
+  <section class="section" id="summary">
+    <div class="section-inner">
+      <p class="eyebrow">Executive Summary</p>
+      <div class="summary-grid">
+        <!-- EDIT: your own two paragraphs go here -->
+        <p class="dropcap">Before entering my MBA program, I managed communities at a international backpackers hostel and taught English—roles that taught me the fundamental art of human connection, cultural nuance, and storytelling. Today, I’m combining that front-line audience insight with a high-level MBA marketing toolkit to step into the Entertainment & Media Industry.</p>
+Entertainment is no longer just about content creation; it’s about community cultivation, fan engagement, and cultural movement. I specialize in taking raw brand narratives and translating them into data-driven marketing campaigns that captivate diverse audiences and drive measurable engagement
+Core Strengths: Entertainment Marketing • Audience Engagement & Community Building • Brand Strategy • Consumer Behavior • Strategic Communication • Go-to-Market Campaigns.</p>
+      </div>
+
+      <!-- EDIT: swap these three figures for whatever best summarizes your own background -->
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Years Pre-MBA</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2</span>
+          <span class="stat-label">Industries Advised</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">Countless</span>
+          <span class="stat-label">Engagements Led</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       BACKGROUND — education, ledger-style
+       ================================================================== -->
+  <section class="section section-alt" id="background">
+    <div class="section-inner">
+      <p class="eyebrow">Background</p>
+      <div class="ledger">
+        <!-- EDIT: MBA program -->
+        <div class="ledger-row">
+          <div class="ledger-date">2026 – 2028</div>
+          <div class="ledger-body">
+            <h3>Full-Time MBA <span class="edit-note">— LEAD College</span></h3>
+            <p>Specializing in Marketing &amp; Business Analytics ·</p>
+          </div>
+        </div>
+        <!-- EDIT: undergraduate degree -->
+        <div class="ledger-row">
+          <div class="ledger-date">2021 – 2024</div>
+          <div class="ledger-body">
+            <h3>B.Com Accounting &amp; Finance <span class="edit-note">— CMS College of Science and Commerce</span></h3>
+            <p> Graduated with Fist Class Honors · 3 years</p>
+          </div>
+        </div>
+        <!-- EDIT: certifications, or delete this row -->
+        <div class="ledger-row">
+          <div class="ledger-date">Certifications</div>
+          <div class="ledger-body">
+            <p> Advanced Microsoft Excel  · TEFL</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       TRACK RECORD — pre-MBA work experience, most recent first
+       ================================================================== -->
+  <section class="section" id="track-record">
+    <div class="section-inner">
+      <p class="eyebrow">Track Record</p>
+      <div class="exhibit-list">
+        <!-- EDIT: most recent role -->
+        <article class="exhibit-card">
+          <div class="exhibit-num">Exhibit 1</div>
+          <div>
+            <h3>Communnity Manager, Monkey Tribe Hostels</h3>
+            <p class="exhibit-meta">Backpackers Hostel · Kerala, India · Jul 2025 – Jun 2026</p>
+            <ul>
+              <li>Cultivated a high-energy, engaged community by designing interactive initiatives and keeping communication seamless.</li>
+              <li>Analyzed audience vibes and feedback to curate experiences that kept people coming back.</li>
+              <li>Mastered the art of audience retention and word-of-mouth engagement—skills I’m ready to scale up in the media space.
+
+</li>
+            </ul>
+          </div>
+        </article>
+        <!-- EDIT: prior role -->
+        <article class="exhibit-card">
+          <div class="exhibit-num">Exhibit 2</div>
+          <div>
+            <h3>English Language Trainer, English Mithra</h3>
+            <p class="exhibit-meta">Kerala, India · Dec 2024 – Jun 2025</p>
+            <ul>
+              <li>Conduct interactive English language sessions for students of varying proficiency levels.</li>
+              <li>Develop customized lesson plans focusing on grammar, vocabulary, and conversational skills.</li>
+              <li>Utilize multimedia tools and real-life scenarios to enhance learning experiences.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       ANALYSIS — skills, grouped like highlighted case terms
+       ================================================================== -->
+  <section class="section section-alt" id="analysis">
+    <div class="section-inner">
+      <p class="eyebrow">Analysis</p>
+      <h2 class="section-heading" style="font-size:var(--fs-h2); margin-bottom:2rem;">Core Competencies</h2>
+      <!-- EDIT: adjust categories and tags to match your own skill set -->
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Strategy &amp; Analytics</h3>
+          <div class="skill-tags">
+            <span class="skill-tag r1">Financial Modeling</span>
+            <span class="skill-tag r2">Market Sizing</span>
+            <span class="skill-tag r3">Competitive Analysis</span>
+            <span class="skill-tag r1">Data Storytelling</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Leadership &amp; Communication</h3>
+          <div class="skill-tags">
+            <span class="skill-tag r2">Cross-Functional Team Management</span>
+            <span class="skill-tag r1">Executive Stakeholder Comms</span>
+            <span class="skill-tag r3">Mentorship &amp; Coaching</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Technical Toolkit</h3>
+          <div class="skill-tags">
+            <span class="skill-tag r3">Excel (Advanced)</span>
+            <span class="skill-tag r1">MS Office</span>
+            <span class="skill-tag r2">ZOHO Books</span>
+            <span class="skill-tag r3">Python (Basics)</span>
+            <span class="skill-tag r1">Gemini (Other AI Tools)</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            <span class="skill-tag r1">English (Professional)</span>
+            <span class="skill-tag r2">Hindi (Professional)</span>
+            <span class="skill-tag r3">Tamil (Conversational)</span>
+            <span class="skill-tag r1">Malayalam (Native)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       EXHIBITS — leadership, competitions, community work
+       ================================================================== -->
+  <section class="section" id="exhibits">
+    <div class="section-inner">
+      <p class="eyebrow">Exhibits</p>
+      <!-- EDIT: swap in your own three highlights -->
+      <div class="leadership-grid">
+        <article class="leadership-card">
+          <span class="leadership-tag">Exhibit A</span>
+          <h3>Event Planning and Coordination</h3>
+          <p><strong>Event Planning and Coordination</strong><br>Sucessfully planned and executed multiple events, ensuring smooth operations and positive participant experiences.</p>
+        </article>
+        <article class="leadership-card">
+          <span class="leadership-tag">Exhibit B</span>
+          <h3>Teaching and Mentoring</h3>
+          <p><strong>Strong Positive Feedback</strong><br>Acquired strong feedback from both my Students and colleagues for my teaching and mentoring approach.</p>
+        </article>
+        <article class="leadership-card">
+          <span class="leadership-tag">Exhibit C</span>
+          <h3>Community Impact</h3>
+          <p><strong>Inhouse friend for the guests</strong><br>Provided exceptional hospitality and support to all guests, ensuring their comfort and satisfaction throughout their visit.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================================================================
+       CONTACT
+       ================================================================== -->
+  <section class="section section-alt section-contact" id="contact">
+    <div class="section-inner">
+      <p class="eyebrow">Next Steps</p>
+      <div class="contact-wrap">
+        <div class="contact-intro">
+          <h2>Looking for my next Endeavours &amp; Internships.</h2>
+          <p>The next chapter of the case is still being written — happy to talk through coffee chats, case interviews, or just where entertainment, training and tech overlap.</p>
+        </div>
+        <div class="contact-card">
+          <dl>
+            <div class="row">
+              <dt>Email</dt>
+              <!-- EDIT: your email -->
+              <dd><a href="mailto:Siyamol649@gmail.com">Siyamol649@gmail.com</a></dd>
+            </div>
+            <div class="row">
+              <dt>LinkedIn</dt>
+              <!-- EDIT: your LinkedIn -->
+              <dd><a href="https://linkedin.com/in/your-profile" target="_blank" rel="noopener">https://www.linkedin.com/in/moideen-sha-44b5b71a7/</a></dd>
+            </div>
+            <div class="row">
+              <dt>Location</dt>
+              <dd>Thrissur, Kerala, India</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <!-- EDIT: name and school -->
+    <span>© 2026 MoideenSha · LEAD College, Class of 2028</span>
+    <span>First-year MBA Candidate and Future Leader</span>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Sticky header shadow on scroll
+    var header = document.getElementById('site-header');
+    var onScroll = function(){
+      header.classList.toggle('is-scrolled', window.scrollY > 8);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Active nav link highlighting
+    var navLinks = Array.prototype.slice.call(document.querySelectorAll('.site-nav a[href^="#"]'));
+    var sections = navLinks
+      .map(function(link){ return document.querySelector(link.getAttribute('href')); })
+      .filter(Boolean);
+
+    if ('IntersectionObserver' in window && sections.length){
+      var navObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          var id = '#' + entry.target.id;
+          var link = navLinks.find(function(l){ return l.getAttribute('href') === id; });
+          if (!link) return;
+          if (entry.isIntersecting){
+            navLinks.forEach(function(l){ l.classList.remove('is-active'); });
+            link.classList.add('is-active');
+          }
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      sections.forEach(function(s){ navObserver.observe(s); });
+    }
+
+    // Scroll-reveal
+    var revealEls = document.querySelectorAll('.reveal');
+    if (reduceMotion || !('IntersectionObserver' in window)){
+      revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+    } else {
+      var revealObserver = new IntersectionObserver(function(entries, obs){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting){
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      revealEls.forEach(function(el){ revealObserver.observe(el); });
+    }
+  })();
+</script>
+
+</body>
+</html>
